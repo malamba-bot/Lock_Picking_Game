@@ -3,22 +3,30 @@ using UnityEngine;
 
 public class PickRotator : MonoBehaviour {
 
-    private float _lastFrameMouseX = 0;
+    [SerializeField] private float sens = 0.1f;
 
-    private InputActionAsset _actionMap;
+    private float _lastFrameMouseX;
 
     private void Start() {
+        _lastFrameMouseX = Mouse.current.delta.x.ReadValue();
         SubscribeToAction();
     }
 
     private void RotatePick(InputAction.CallbackContext value) {
         float mouseX = value.ReadValue<float>();
-        float offset = mouseX - _lastFrameMouseX;
+        float offset = (mouseX - _lastFrameMouseX) * sens * -1;
 
-    }
+        var currentAngle = transform.eulerAngles;
+        Debug.Log(offset);
+        Vector3 angle = new Vector3(
+                0,0,
+                offset);
+        transform.Rotate(angle);
+        Debug.Log($"changed to {angle}");
 
 
-    private void Update() {
+        _lastFrameMouseX = mouseX;
+
     }
 
     private void SubscribeToAction() {
