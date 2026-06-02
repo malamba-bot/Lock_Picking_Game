@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class PickRotator : MonoBehaviour {
 
-    [SerializeField] int MAX_ANGLE = 270;
-    [SerializeField] int MIN_ANGLE = 90;
+    [SerializeField] int MAX_ANGLE = 0;
+    [SerializeField] int MIN_ANGLE = 0;
     private HingeJoint _hingeJoint;
     private JointMotor _jointMotor;
+
+    private float _lastFrameMouseX = 0;
 
     private InputActionAsset _actionMap;
 
@@ -19,12 +21,16 @@ public class PickRotator : MonoBehaviour {
     }
 
     private void RotatePick(InputAction.CallbackContext value) {
-        //Debug.Log(value);
+        float mouseX = value.ReadValue<float>();
+        float offset = mouseX - _lastFrameMouseX;
+
+        var hingeLimits = _hingeJoint.limits;
+        hingeLimits.max = hingeLimits.min = (hingeLimits.max + offset) % 360;
+        _hingeJoint.limits = hingeLimits;
     }
 
 
     private void Update() {
-        Debug.Log(_hingeJoint.angle);
     }
 
     private void SetMotorAttributes() {
