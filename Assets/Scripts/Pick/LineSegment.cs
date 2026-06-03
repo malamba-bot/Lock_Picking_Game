@@ -39,6 +39,24 @@ public class PickSemiCircleOutline : MonoBehaviour {
 
         public void DrawSegment(LineSegment segment) {
             Debug.Log($"start : {segment.startAngle}, end : {segment.endAngle}");
+            segment.lr.positionCount = 2;
+            /*
+            for (int i = 0; i < segment.lr.positionCount; i++) {
+                segment.lr.SetPosition(i, new Vector3(
+                            Mathf.Cos(segment.startAngle + i * (segment.endAngle - segment.startAngle)),
+                            Mathf.Sin(segment.startAngle + i * (segment.endAngle - segment.startAngle)),
+                            -25));
+            }
+            */
+            segment.lr.SetPosition(0, new Vector3(
+                        Mathf.Cos(segment.startAngle),
+                        Mathf.Sin(segment.startAngle),
+                        -15 ));
+
+            segment.lr.SetPosition(1, new Vector3(
+                        Mathf.Cos(segment.endAngle),
+                        Mathf.Sin(segment.endAngle),
+                        -15 ));
         }
 
         /*
