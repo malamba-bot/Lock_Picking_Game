@@ -20,7 +20,7 @@ public class PickRotator : MonoBehaviour {
 
         var currentAngle = transform.eulerAngles.z;
         if (currentAngle > 180) currentAngle -= 360;
-        Debug.Log(currentAngle);
+        // Debug.Log(currentAngle);
         float clampedAngle = Mathf.Clamp(currentAngle + offset, minAngle, maxAngle);
         offset = clampedAngle - currentAngle;
 
