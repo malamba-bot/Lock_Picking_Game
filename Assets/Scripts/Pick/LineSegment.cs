@@ -3,8 +3,11 @@ using UnityEngine;
 /* The template for this script was AI generated @claude.ai */
 public class PickSemiCircleOutline : MonoBehaviour {
 
+    const float PICK_CIRCLE_GAP = 0.3f;
     private const float _TOTAL_DEGREES = 180; // Semi circle
+    private float _degreesPerSegment;
 
+    [SerializeField] private float radius;
     [SerializeField] private int numSegments = 8;
     [SerializeField] private int segmentResolution = 16;
     [SerializeField] private GameObject Pick;
@@ -15,48 +18,36 @@ public class PickSemiCircleOutline : MonoBehaviour {
         public float startAngle;
         public float endAngle;
         public Color color;
-        public LineRenderer lr;
+        public LineRenderer lineRenderer;
     }
 
-    const float PICK_CIRCLE_GAP = 0.3f;
-
-
     private void Start() { 
+        radius = Pick.GetComponent<Renderer>().bounds.size.x + PICK_CIRCLE_GAP;
         _lineSegments = new LineSegment[numSegments];
-        float degreesPerSegment = _TOTAL_DEGREES / numSegments; 
+        _degreesPerSegment = _TOTAL_DEGREES / numSegments; 
         for (int i = 0; i < numSegments; i++) {
             var seg = new LineSegment();
             _lineSegments[i] = seg; 
-            seg.lr = new GameObject("LineSegment").AddComponent<LineRenderer>();
-            seg.startAngle = i * degreesPerSegment;
-            seg.endAngle = (i + 1) * degreesPerSegment;
-            seg.lr.transform.parent = transform;
-            seg.lr.material = Resources.Load<Material>("Pick Semi Circle");
-            seg.lr.widthMultiplier = 0.02f;
+            seg.lineRenderer = new GameObject("LineSegment").AddComponent<LineRenderer>();
+            seg.startAngle = i * _degreesPerSegment;
+            seg.endAngle = (i + 1) * _degreesPerSegment;
+            seg.lineRenderer.transform.parent = transform;
+            seg.lineRenderer.material = Resources.Load<Material>("Materials/Pick Semi Circle");
+            seg.lineRenderer.widthMultiplier = 0.08f;
             DrawSegment(seg);
         }
     }
 
         public void DrawSegment(LineSegment segment) {
-            Debug.Log($"start : {segment.startAngle}, end : {segment.endAngle}");
-            segment.lr.positionCount = 2;
-            /*
-            for (int i = 0; i < segment.lr.positionCount; i++) {
-                segment.lr.SetPosition(i, new Vector3(
-                            Mathf.Cos(segment.startAngle + i * (segment.endAngle - segment.startAngle)),
-                            Mathf.Sin(segment.startAngle + i * (segment.endAngle - segment.startAngle)),
-                            -25));
+            float degreesPerResolutionStep = _degreesPerSegment / segmentResolution;
+            segment.lineRenderer.positionCount = segmentResolution + 1;
+            for (int i = 0; i < segment.lineRenderer.positionCount; i++) {
+                float angle = (segment.startAngle + i * degreesPerResolutionStep) * Mathf.Deg2Rad;
+                segment.lineRenderer.SetPosition(i, new Vector3(
+                            Mathf.Cos(angle) * radius,
+                            Mathf.Sin(angle) * radius,
+                            0));
             }
-            */
-            segment.lr.SetPosition(0, new Vector3(
-                        Mathf.Cos(segment.startAngle),
-                        Mathf.Sin(segment.startAngle),
-                        -15 ));
-
-            segment.lr.SetPosition(1, new Vector3(
-                        Mathf.Cos(segment.endAngle),
-                        Mathf.Sin(segment.endAngle),
-                        -15 ));
         }
 
         /*
