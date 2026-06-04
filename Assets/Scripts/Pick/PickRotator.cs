@@ -4,13 +4,19 @@ using UnityEngine;
 public class PickRotator : MonoBehaviour {
 
     [SerializeField] private float sens = 0.3f;
-    [SerializeField] private float maxAngle = 90;
-    [SerializeField] private float minAngle = -90;
+    [SerializeField] private float maxAngle = 0;
+    [SerializeField] private float minAngle = -180;
+    [SerializeField] private PickSemiCircleOutline semiCircleRim;
+
+    [HideInInspector] public float totalRange;
 
     private float _lastFrameMouseX;
+    private float _currentSegment;
 
     private void Start() {
+        Cursor.visible = false;
         _lastFrameMouseX = Mouse.current.delta.x.ReadValue();
+        totalRange = maxAngle - minAngle;
         SubscribeToAction();
     }
 
@@ -19,9 +25,11 @@ public class PickRotator : MonoBehaviour {
         float offset = (mouseX - _lastFrameMouseX) * sens * -1;
 
         var currentAngle = transform.eulerAngles.z;
-        if (currentAngle > 180) currentAngle -= 360;
-        // Debug.Log(currentAngle);
-        float clampedAngle = Mathf.Clamp(currentAngle + offset, minAngle, maxAngle);
+        if (currentAngle < 90) currentAngle += 360;
+        currentAngle -= 270;
+        //Debug.Log(currentAngle);
+        var extremes = semiCircleRim.extremeAngles;
+        float clampedAngle = Mathf.Clamp(currentAngle + offset, extremes.min, extremes.max);
         offset = clampedAngle - currentAngle;
 
         Vector3 angle = new Vector3(
@@ -30,7 +38,6 @@ public class PickRotator : MonoBehaviour {
         transform.Rotate(angle);
 
         _lastFrameMouseX = mouseX;
-
     }
 
     private void SubscribeToAction() {
@@ -39,4 +46,3 @@ public class PickRotator : MonoBehaviour {
         rotatePick.performed += RotatePick; 
     }
 }
-
