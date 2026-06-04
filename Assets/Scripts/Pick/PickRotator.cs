@@ -24,9 +24,6 @@ public class PickRotator : MonoBehaviour {
         if (currentAngle > 180) currentAngle -= 360;
         //Debug.Log(currentAngle);
         float clampedAngle = Mathf.Clamp(currentAngle + offset, minAngle, maxAngle);
-        float degreesPerSegment = (maxAngle - minAngle) / semiCircleRim.numSegments;
-        _currentSegment = Mathf.Floor(clampedAngle + 90 / degreesPerSegment); 
-        Debug.Log($"angle {clampedAngle + 90}, seg: {_currentSegment}, perSegment {degreesPerSegment}");
         offset = clampedAngle - currentAngle;
 
         Vector3 angle = new Vector3(
@@ -35,7 +32,6 @@ public class PickRotator : MonoBehaviour {
         transform.Rotate(angle);
 
         _lastFrameMouseX = mouseX;
-
     }
 
     private void SubscribeToAction() {
@@ -44,4 +40,3 @@ public class PickRotator : MonoBehaviour {
         rotatePick.performed += RotatePick; 
     }
 }
-

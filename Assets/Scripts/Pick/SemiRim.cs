@@ -8,11 +8,16 @@ public class PickSemiCircleOutline : MonoBehaviour {
     private float _degreesPerSegment;
 
     [SerializeField] private float radius;
-    [SerializeField] public int numSegments = 8;
-    [SerializeField] private int segmentResolution = 16;
+    [SerializeField] public int numSegments = 16;
+    [SerializeField] private int segmentResolution = 8;
     [SerializeField] private GameObject Pick;
 
+    [HideInInspector] public LineSegment activeSegment { get; private set; }
+
     private LineSegment[] _lineSegments;
+
+    private Material _inactiveMaterial;
+    private Material _activeMaterial;
 
     public class LineSegment { 
         public float startAngle;
@@ -22,7 +27,13 @@ public class PickSemiCircleOutline : MonoBehaviour {
     }
 
     private void Start() { 
+        _inactiveMaterial = Resources.Load<Material>("Materials/Pick Semi Circle");
+        _activeMaterial = Resources.Load<Material>("Materials/Valid Segment");
         radius = Pick.GetComponent<Renderer>().bounds.size.x + PICK_CIRCLE_GAP;
+        DrawSemiCircle();
+    }
+
+    private void DrawSemiCircle() {
         _lineSegments = new LineSegment[numSegments];
         _degreesPerSegment = _TOTAL_DEGREES / numSegments; 
         for (int i = 0; i < numSegments; i++) {
@@ -32,39 +43,36 @@ public class PickSemiCircleOutline : MonoBehaviour {
             seg.startAngle = i * _degreesPerSegment;
             seg.endAngle = (i + 1) * _degreesPerSegment;
             seg.lineRenderer.transform.parent = transform;
-            if (i != 1) {
-            seg.lineRenderer.material = Resources.Load<Material>("Materials/Pick Semi Circle");
-            } else
-            seg.lineRenderer.material = Resources.Load<Material>("Materials/Valid Segment");
             seg.lineRenderer.widthMultiplier = 0.2f;
-            DrawSegment(seg);
+            DrawSegment(seg, _inactiveMaterial);
         }
     }
 
-        public void DrawSegment(LineSegment segment) {
-            float degreesPerResolutionStep = _degreesPerSegment / segmentResolution;
-            segment.lineRenderer.positionCount = segmentResolution + 1;
-            for (int i = 0; i < segment.lineRenderer.positionCount; i++) {
-                float angle = (segment.startAngle + i * degreesPerResolutionStep) * Mathf.Deg2Rad;
-                segment.lineRenderer.SetPosition(i, new Vector3(
-                            Mathf.Cos(angle) * radius,
-                            Mathf.Sin(angle) * radius,
-                            0));
-            }
-        }
-
-        /*
-        var radius = Pick.GetComponent<Renderer>().bounds.size.x + PICK_CIRCLE_GAP;
-        LineRenderer lr = GetComponent<LineRenderer>();
-        lr.positionCount = numSegments + 1;
-
-        for (int i = 0; i <= numSegments; i++) {
-            float angle = Mathf.PI * i / numSegments;
-            lr.SetPosition(i, new Vector3(
+    public void DrawSegment(LineSegment segment, Material material) {
+        float degreesPerResolutionStep = _degreesPerSegment / segmentResolution;
+        segment.lineRenderer.positionCount = segmentResolution + 1;
+        segment.lineRenderer.material = material;
+        for (int i = 0; i < segment.lineRenderer.positionCount; i++) {
+            float angle = (segment.startAngle + i * degreesPerResolutionStep) * Mathf.Deg2Rad;
+            segment.lineRenderer.SetPosition(i, new Vector3(
                         Mathf.Cos(angle) * radius,
                         Mathf.Sin(angle) * radius,
                         0));
         }
-        */
+    }
+
+    /*
+       var radius = Pick.GetComponent<Renderer>().bounds.size.x + PICK_CIRCLE_GAP;
+       LineRenderer lr = GetComponent<LineRenderer>();
+       lr.positionCount = numSegments + 1;
+
+       for (int i = 0; i <= numSegments; i++) {
+       float angle = Mathf.PI * i / numSegments;
+       lr.SetPosition(i, new Vector3(
+       Mathf.Cos(angle) * radius,
+       Mathf.Sin(angle) * radius,
+       0));
+       }
+       */
 
 }
