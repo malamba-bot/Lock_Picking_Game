@@ -408,6 +408,7 @@ GameObject:
   - component: {fileID: 1027565543}
   - component: {fileID: 1027565542}
   - component: {fileID: 1027565541}
+  - component: {fileID: 1027565545}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -533,6 +534,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1027565545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027565540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 333dc7a0e96344bb287acaab8706ffaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  pickMoveClacks:
+  - {fileID: 8300000, guid: 935c5a38563fc4b7cb0466ea6fd95440, type: 3}
+  - {fileID: 8300000, guid: 29aa6accaf5064deb9a0eb4b70cc957e, type: 3}
+  - {fileID: 8300000, guid: 7ccd37ec8700242c381da99998a75ffa, type: 3}
+  - {fileID: 8300000, guid: 7a4c739c4fbc64f90a5f8b67f663edf2, type: 3}
+  pickMoveVol: 0.8
+  pickMovePitchMin: 0.95
+  pickMovePitchMax: 1.05
+  lockErrorClip: {fileID: 8300000, guid: 11c9d094453044af689414698c74acef, type: 3}
+  errorVol: 1
+  unlockClip: {fileID: 8300000, guid: 12073f6b1f0184daaa5588cf3a9cb8b6, type: 3}
+  unlockVol: 1
+  victoryClip: {fileID: 8300000, guid: 65371e3b3d69d42e39485a8db43f71a9, type: 3}
+  victoryVol: 1
+  maxSources: 7
 --- !u!1001 &1212249134
 PrefabInstance:
   m_ObjectHideFlags: 0
