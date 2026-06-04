@@ -27,13 +27,13 @@ public class PickSemiCircleOutline : MonoBehaviour {
         public LineRenderer lineRenderer;
     }
 
-    public (float min, float max) extremeAngles = (0, 0);
+    public (float min, float max) extremeAngles = (0, 90);
 
     public void AddActiveSegment() {
         int segmentNum = numSegments - 1 - _activeSegments.Count;
         LineSegment seg = _lineSegments[segmentNum];
         _activeSegments.Add(seg);
-        extremeAngles.max = seg.endAngle;
+        extremeAngles.min = seg.startAngle;
         Debug.Log($"seg max: {seg.endAngle}, seg min: {seg.startAngle}");
         Debug.Log($"max: {extremeAngles.max}, min: {extremeAngles.min}");
         DrawSegment(seg, _activeMaterial);
@@ -42,7 +42,7 @@ public class PickSemiCircleOutline : MonoBehaviour {
     private void Start() { 
         _inactiveMaterial = Resources.Load<Material>("Materials/Pick Semi Circle");
         _activeMaterial = Resources.Load<Material>("Materials/Valid Segment");
-        radius = Pick.GetComponent<Renderer>().bounds.size.x + PICK_CIRCLE_GAP;
+        radius = Pick.GetComponent<Renderer>().bounds.size.y + PICK_CIRCLE_GAP;
         DrawSemiCircle();
     }
 
