@@ -4,15 +4,18 @@ using UnityEngine;
 public class PickRotator : MonoBehaviour {
 
     [SerializeField] private float sens = 0.3f;
-    [SerializeField] private float maxAngle = 90;
-    [SerializeField] private float minAngle = -90;
+    [SerializeField] private float maxAngle = 0;
+    [SerializeField] private float minAngle = -180;
     [SerializeField] private PickSemiCircleOutline semiCircleRim;
+
+    [HideInInspector] public float totalRange;
 
     private float _lastFrameMouseX;
     private float _currentSegment;
 
     private void Start() {
         _lastFrameMouseX = Mouse.current.delta.x.ReadValue();
+        totalRange = maxAngle - minAngle;
         SubscribeToAction();
     }
 

@@ -1,10 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /* The template for this script was AI generated @claude.ai */
 public class PickSemiCircleOutline : MonoBehaviour {
 
     const float PICK_CIRCLE_GAP = 0.3f;
-    private const float _TOTAL_DEGREES = 180; // Semi circle
+    private float _totalRange = 90; 
     private float _degreesPerSegment;
 
     [SerializeField] private float radius;
@@ -12,9 +13,9 @@ public class PickSemiCircleOutline : MonoBehaviour {
     [SerializeField] private int segmentResolution = 8;
     [SerializeField] private GameObject Pick;
 
-    [HideInInspector] public LineSegment activeSegment { get; private set; }
 
     private LineSegment[] _lineSegments;
+    private List<LineSegment> _activeSegments;
 
     private Material _inactiveMaterial;
     private Material _activeMaterial;
@@ -26,6 +27,13 @@ public class PickSemiCircleOutline : MonoBehaviour {
         public LineRenderer lineRenderer;
     }
 
+    public void AddActiveSegment() {
+        int segmentNum = _activeSegments.Count;
+        LineSegment seg = _lineSegments[segmentNum];
+        _activeSegments.Add(seg);
+        DrawSegment(seg, _activeMaterial);
+    }
+
     private void Start() { 
         _inactiveMaterial = Resources.Load<Material>("Materials/Pick Semi Circle");
         _activeMaterial = Resources.Load<Material>("Materials/Valid Segment");
@@ -34,8 +42,9 @@ public class PickSemiCircleOutline : MonoBehaviour {
     }
 
     private void DrawSemiCircle() {
+        _activeSegments = new();
         _lineSegments = new LineSegment[numSegments];
-        _degreesPerSegment = _TOTAL_DEGREES / numSegments; 
+        _degreesPerSegment = _totalRange / numSegments; 
         for (int i = 0; i < numSegments; i++) {
             var seg = new LineSegment();
             _lineSegments[i] = seg; 
@@ -46,6 +55,8 @@ public class PickSemiCircleOutline : MonoBehaviour {
             seg.lineRenderer.widthMultiplier = 0.2f;
             DrawSegment(seg, _inactiveMaterial);
         }
+        AddActiveSegment();
+        AddActiveSegment();
     }
 
     public void DrawSegment(LineSegment segment, Material material) {
@@ -60,19 +71,4 @@ public class PickSemiCircleOutline : MonoBehaviour {
                         0));
         }
     }
-
-    /*
-       var radius = Pick.GetComponent<Renderer>().bounds.size.x + PICK_CIRCLE_GAP;
-       LineRenderer lr = GetComponent<LineRenderer>();
-       lr.positionCount = numSegments + 1;
-
-       for (int i = 0; i <= numSegments; i++) {
-       float angle = Mathf.PI * i / numSegments;
-       lr.SetPosition(i, new Vector3(
-       Mathf.Cos(angle) * radius,
-       Mathf.Sin(angle) * radius,
-       0));
-       }
-       */
-
 }
