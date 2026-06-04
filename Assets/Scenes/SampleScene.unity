@@ -401,9 +401,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickRotator
   sens: 0.3
-  maxAngle: 90
+  maxAngle: 0
   minAngle: -90
   semiCircleRim: {fileID: 1692932356}
+  totalRange: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,8 +559,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HalfCircleRim
   radius: 0
-  numSegments: 8
-  segmentResolution: 16
+  numSegments: 5
+  segmentResolution: 8
   Pick: {fileID: 1221648278}
 --- !u!120 &1692932357
 LineRenderer:

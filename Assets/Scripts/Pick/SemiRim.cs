@@ -28,7 +28,7 @@ public class PickSemiCircleOutline : MonoBehaviour {
     }
 
     public void AddActiveSegment() {
-        int segmentNum = _activeSegments.Count;
+        int segmentNum = numSegments - 1 - _activeSegments.Count;
         LineSegment seg = _lineSegments[segmentNum];
         _activeSegments.Add(seg);
         DrawSegment(seg, _activeMaterial);
@@ -55,7 +55,6 @@ public class PickSemiCircleOutline : MonoBehaviour {
             seg.lineRenderer.widthMultiplier = 0.2f;
             DrawSegment(seg, _inactiveMaterial);
         }
-        AddActiveSegment();
         AddActiveSegment();
     }
 
