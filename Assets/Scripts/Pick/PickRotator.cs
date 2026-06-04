@@ -24,9 +24,11 @@ public class PickRotator : MonoBehaviour {
         float offset = (mouseX - _lastFrameMouseX) * sens * -1;
 
         var currentAngle = transform.eulerAngles.z;
-        if (currentAngle > 180) currentAngle -= 360;
-        //Debug.Log(currentAngle);
-        float clampedAngle = Mathf.Clamp(currentAngle + offset, minAngle, maxAngle);
+        if (currentAngle < 90) currentAngle += 360;
+        currentAngle -= 270;
+        Debug.Log(currentAngle);
+        var extremes = semiCircleRim.extremeAngles;
+        float clampedAngle = Mathf.Clamp(currentAngle + offset, extremes.min, extremes.max);
         offset = clampedAngle - currentAngle;
 
         Vector3 angle = new Vector3(

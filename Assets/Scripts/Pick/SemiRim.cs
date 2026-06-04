@@ -27,10 +27,15 @@ public class PickSemiCircleOutline : MonoBehaviour {
         public LineRenderer lineRenderer;
     }
 
+    public (float min, float max) extremeAngles = (0, 0);
+
     public void AddActiveSegment() {
         int segmentNum = numSegments - 1 - _activeSegments.Count;
         LineSegment seg = _lineSegments[segmentNum];
         _activeSegments.Add(seg);
+        extremeAngles.max = seg.endAngle;
+        Debug.Log($"seg max: {seg.endAngle}, seg min: {seg.startAngle}");
+        Debug.Log($"max: {extremeAngles.max}, min: {extremeAngles.min}");
         DrawSegment(seg, _activeMaterial);
     }
 
