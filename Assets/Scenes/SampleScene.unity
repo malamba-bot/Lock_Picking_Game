@@ -403,6 +403,7 @@ MonoBehaviour:
   sens: 0.3
   maxAngle: 90
   minAngle: -90
+  semiCircleRim: {fileID: 1692932356}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20222d5592fd66485a28f83d81a4ce8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HalfCircleRim
+  radius: 0
   numSegments: 8
   segmentResolution: 16
   Pick: {fileID: 1221648278}

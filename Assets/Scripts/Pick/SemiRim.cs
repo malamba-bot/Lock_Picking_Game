@@ -8,7 +8,7 @@ public class PickSemiCircleOutline : MonoBehaviour {
     private float _degreesPerSegment;
 
     [SerializeField] private float radius;
-    [SerializeField] private int numSegments = 8;
+    [SerializeField] public int numSegments = 8;
     [SerializeField] private int segmentResolution = 16;
     [SerializeField] private GameObject Pick;
 
@@ -32,8 +32,11 @@ public class PickSemiCircleOutline : MonoBehaviour {
             seg.startAngle = i * _degreesPerSegment;
             seg.endAngle = (i + 1) * _degreesPerSegment;
             seg.lineRenderer.transform.parent = transform;
+            if (i != 1) {
             seg.lineRenderer.material = Resources.Load<Material>("Materials/Pick Semi Circle");
-            seg.lineRenderer.widthMultiplier = 0.08f;
+            } else
+            seg.lineRenderer.material = Resources.Load<Material>("Materials/Valid Segment");
+            seg.lineRenderer.widthMultiplier = 0.2f;
             DrawSegment(seg);
         }
     }
