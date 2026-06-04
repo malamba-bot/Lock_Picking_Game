@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 /* The template for this script was AI generated @claude.ai */
@@ -73,6 +74,12 @@ public class PickSemiCircleOutline : MonoBehaviour {
                         Mathf.Cos(angle) * radius,
                         Mathf.Sin(angle) * radius,
                         0));
+        }
+    }
+
+    private void Update() {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame) {
+            AddActiveSegment();
         }
     }
 }
