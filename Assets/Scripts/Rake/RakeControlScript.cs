@@ -4,37 +4,56 @@ using UnityEngine.InputSystem;
 public class LockRakeController : MonoBehaviour 
 {
     [Header("pick reference")]
-    public Transform pickTransform; // drag "pick_final" here
+    public Transform pickTransform; 
     public PickSemiCircleOutline semiCircleRim; 
 
     [Header("ui script")]
-    public ButtonPromptUI buttonUI; // drag your UI script here!
+    public ButtonPromptUI buttonUI; 
 
 
     [Header("progression settings")]
-    public int segmentsToUnlock = 5; // how many green chunks to win
-    public int pressesPerSegment = 10; // how many alternating button presses per chunk
+    public int segmentsToUnlock = 5; 
+    public int pressesPerSegment = 10; 
     public float rakeLeftMaxAngle = -45f; 
     public float smoothSpeed = 6f;
 
     private int currentPresses = 0;
     private int currentSegmentsUnlocked = 0;
-    private bool waitingForD = false; 
     private float currentVisualAngle = 0f;
 
+    // tracks which WASD key is currently required
+    private ButtonPromptUI.TargetKey currentRequiredKey;
 
-    [Header("shaking effect")]
+
+    [Header("shaking & click-clack effect")]
     public float errorShakeMultiplier = 0.18f;
+    public float clickClackBumpAmount = 8f; 
+    
     private Vector3 initialLocalPos;
     private float shakeTimer = 0f;
+    private float clickClackAngle = 0f; 
+    
+    private bool hasPlayedVictory = false; 
 
 
     void Start() {
         initialLocalPos = transform.localPosition;
+        PickNextKey(); // picks the very first random starting key
+    }
+
+    // randomly selects the next required key (and updates the UI)
+    void PickNextKey() {
+        ButtonPromptUI.TargetKey nextKey = currentRequiredKey;
         
-        // initialize the buttons so A is lit up first
+        // keep rolling until we get a DIFFERENT key (prevents back-to-back W's)
+        while (nextKey == currentRequiredKey) {
+            nextKey = (ButtonPromptUI.TargetKey)Random.Range(0, 4); // 0=W, 1=A, 2=S, 3=D
+        }
+        
+        currentRequiredKey = nextKey;
+        
         if (buttonUI != null) {
-            buttonUI.SetWaitingForA();
+            buttonUI.SetTarget(currentRequiredKey);
         }
     }
 
@@ -43,103 +62,123 @@ public class LockRakeController : MonoBehaviour
     {
         if (pickTransform == null || semiCircleRim == null) return;
 
-        // 1. check if we have already won
         bool isWinState = currentSegmentsUnlocked >= segmentsToUnlock;
 
         if (isWinState) 
         {
-            // slide rake left and win!
             transform.localPosition = Vector3.Lerp(transform.localPosition, initialLocalPos, Time.deltaTime * 12f);
             currentVisualAngle = Mathf.Lerp(currentVisualAngle, rakeLeftMaxAngle, Time.deltaTime * smoothSpeed);
             transform.localRotation = Quaternion.Euler(0, 0, currentVisualAngle);
+
+            if (!hasPlayedVictory) {
+                hasPlayedVictory = true;
+                if (AudioManager.Instance != null) {
+                    AudioManager.Instance.PlayVictory();
+                }
+            }
 
             if (Mathf.Abs(currentVisualAngle - rakeLeftMaxAngle) < 1f) {
                 Debug.Log("lock picked! victory!");
                 enabled = false; 
             }
-            Debug.Log("lock picked! victory!");
-            return; // completely stop doing other math
+            return; 
         }
 
-
-        // 2. figure out where the "sweet spot" is
+        // figure out where the "sweet spot" is
         float processedPickAngle = pickTransform.eulerAngles.z;
         if (processedPickAngle < 90) processedPickAngle += 360;
         processedPickAngle -= 270; 
 
         float degreesPerSegment = 90f / semiCircleRim.numSegments;
-        float zoneMin = semiCircleRim.extremeAngles.min; // the bottom edge of the green area
-        float zoneMax = zoneMin + degreesPerSegment; // the top edge of just the newest segment
+        float zoneMin = semiCircleRim.extremeAngles.min; 
+        float zoneMax = zoneMin + degreesPerSegment; 
 
-        // the player MUST hover over the newest added green segment at the bottom!
         bool insideGreenZone = processedPickAngle >= (zoneMin - 1f) && processedPickAngle <= (zoneMax + 1f);
 
 
-        // 3. read the key presses
+        // check all 4 keys
+        bool hitW = Keyboard.current.wKey.wasPressedThisFrame;
         bool hitA = Keyboard.current.aKey.wasPressedThisFrame;
+        bool hitS = Keyboard.current.sKey.wasPressedThisFrame;
         bool hitD = Keyboard.current.dKey.wasPressedThisFrame;
 
-        if (hitA || hitD) 
+        bool anyKeyHit = hitW || hitA || hitS || hitD;
+
+        if (anyKeyHit) 
         {
             if (insideGreenZone) 
             {
-                // check if they hit the right alternating key
-                if (hitA && !waitingForD) {
+                // check if the specific key they hit matches the current required key
+                bool hitCorrect = false;
+                if (currentRequiredKey == ButtonPromptUI.TargetKey.W && hitW) hitCorrect = true;
+                else if (currentRequiredKey == ButtonPromptUI.TargetKey.A && hitA) hitCorrect = true;
+                else if (currentRequiredKey == ButtonPromptUI.TargetKey.S && hitS) hitCorrect = true;
+                else if (currentRequiredKey == ButtonPromptUI.TargetKey.D && hitD) hitCorrect = true;
+
+                if (hitCorrect) {
                     RegisterGoodPress();
-                    waitingForD = true;
-                    if (buttonUI != null) buttonUI.SetWaitingForD();
-                } 
-                else if (hitD && waitingForD) {
-                    RegisterGoodPress();
-                    waitingForD = false;
-                    if (buttonUI != null) buttonUI.SetWaitingForA();
-                }
-                else {
-                    // wrong button pressed! trigger a shake
-                    shakeTimer = 0.3f;
+                    PickNextKey(); // grab a new random key for them to press!
+                } else {
+                    TriggerError(); // they pressed the wrong key in the sequence!
                 }
             }
             else 
             {
-                // mashed while their mouse was outside the newest green tip
-                shakeTimer = 0.3f;
+                TriggerError(); // outside the green zone
             }
         }
 
 
-        // 4. shaking feedback
+        // shaking & click-clack movement
         if (shakeTimer > 0f) {
             shakeTimer -= Time.deltaTime;
             float randomJitter = Random.Range(-errorShakeMultiplier * 50f, errorShakeMultiplier * 50f);
             transform.localRotation = Quaternion.Euler(0, 0, randomJitter);
             transform.localPosition = Vector3.Lerp(transform.localPosition, initialLocalPos, Time.deltaTime * 15f);
         } else {
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            clickClackAngle = Mathf.Lerp(clickClackAngle, 0f, Time.deltaTime * 15f);
+            transform.localRotation = Quaternion.Euler(0, 0, clickClackAngle);
             transform.localPosition = Vector3.Lerp(transform.localPosition, initialLocalPos, Time.deltaTime * 15f);
         }
     }
 
 
-    // logic to add points and spawn new green segments
     private void RegisterGoodPress()
     {
         currentPresses++;
         Debug.Log($"good press! {currentPresses} / {pressesPerSegment}");
+
+        // randomly jolts the rake up or down on a good press so it looks chaotic!
+        if (Random.value > 0.5f) {
+            clickClackAngle = clickClackBumpAmount; 
+        } else {
+            clickClackAngle = -clickClackBumpAmount; 
+        }
+        
+        if (AudioManager.Instance != null) {
+            AudioManager.Instance.PlayPickMove();
+        }
 
         if (currentPresses >= pressesPerSegment)
         {
             currentPresses = 0;
             currentSegmentsUnlocked++;
             
-            // this tells your old script to draw a new green piece, 
-            // which also perfectly un-traps the pick allowing it to move lower!
             semiCircleRim.AddActiveSegment();
             
             Debug.Log($"segment unlocked! total: {currentSegmentsUnlocked} / {segmentsToUnlock}");
 
             if (currentSegmentsUnlocked >= segmentsToUnlock) {
-                if (buttonUI != null) buttonUI.HideBoth();
+                if (buttonUI != null) buttonUI.SetTarget(ButtonPromptUI.TargetKey.None); // hides all bright buttons on win
             }
+        }
+    }
+
+    private void TriggerError() 
+    {
+        shakeTimer = 0.3f;
+        if (AudioManager.Instance != null) {
+            AudioManager.Instance.PlayLockError();
         }
     }
 }
