@@ -1027,7 +1027,7 @@ MonoBehaviour:
   pickMovePitchMin: 0.95
   pickMovePitchMax: 1.05
   lockErrorClip: {fileID: 8300000, guid: 11c9d094453044af689414698c74acef, type: 3}
-  errorVol: 0.5
+  errorVol: 0.2
   unlockClip: {fileID: 8300000, guid: 12073f6b1f0184daaa5588cf3a9cb8b6, type: 3}
   unlockVol: 1
   victoryClip: {fileID: 8300000, guid: 65371e3b3d69d42e39485a8db43f71a9, type: 3}
