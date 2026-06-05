@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour {
 
     [Header("2. Lock Error / Fail Sound")]
     public AudioClip lockErrorClip;
-    public float errorVol = 1f;
+    public float errorVol = 0.5f;
 
 
     [Header("3. Sweet Spot Unlock")]
