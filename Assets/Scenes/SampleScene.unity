@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 55688711}
   - component: {fileID: 55688710}
   m_Layer: 5
-  m_Name: Image (10)
+  m_Name: D Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 355747691}
   - component: {fileID: 355747690}
   m_Layer: 5
-  m_Name: Image (5)
+  m_Name: A grey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -408,7 +408,7 @@ GameObject:
   - component: {fileID: 412717537}
   - component: {fileID: 412717536}
   m_Layer: 5
-  m_Name: Image (9)
+  m_Name: S Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -483,7 +483,7 @@ GameObject:
   - component: {fileID: 527379684}
   - component: {fileID: 527379683}
   m_Layer: 5
-  m_Name: Image (4)
+  m_Name: W grey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -558,7 +558,7 @@ GameObject:
   - component: {fileID: 622360602}
   - component: {fileID: 622360601}
   m_Layer: 5
-  m_Name: Image (6)
+  m_Name: S Grey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -849,14 +849,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45582c5850c104e8c9d97c842f1716a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptUI
-  wBright: {fileID: 0}
-  wDull: {fileID: 0}
-  aBright: {fileID: 0}
-  aDull: {fileID: 0}
-  sBright: {fileID: 0}
-  sDull: {fileID: 0}
-  dBright: {fileID: 0}
-  dDull: {fileID: 0}
+  wBright: {fileID: 1413022999}
+  wDull: {fileID: 527379681}
+  aBright: {fileID: 809583654}
+  aDull: {fileID: 355747688}
+  sBright: {fileID: 412717534}
+  sDull: {fileID: 622360599}
+  dBright: {fileID: 55688708}
+  dDull: {fileID: 1510699725}
 --- !u!1 &809583654
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 809583657}
   - component: {fileID: 809583656}
   m_Layer: 5
-  m_Name: Image (8)
+  m_Name: A green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1163,7 +1163,7 @@ GameObject:
   - component: {fileID: 1413023002}
   - component: {fileID: 1413023001}
   m_Layer: 5
-  m_Name: Image (7)
+  m_Name: W green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1238,7 +1238,7 @@ GameObject:
   - component: {fileID: 1510699728}
   - component: {fileID: 1510699727}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: D Grey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
