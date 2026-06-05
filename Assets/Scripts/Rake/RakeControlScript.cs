@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class LockRakeController : MonoBehaviour 
 {
+
+    
     [Header("pick reference")]
     public Transform pickTransform; 
     public PickSemiCircleOutline semiCircleRim; 
@@ -28,10 +30,12 @@ public class LockRakeController : MonoBehaviour
     [Header("shaking & click-clack effect")]
     public float errorShakeMultiplier = 0.18f;
     public float clickClackBumpAmount = 8f; 
+    public float clickClackHoldTime = 0.15f; // ADDED: how long it freezes on a hit!
     
     private Vector3 initialLocalPos;
     private float shakeTimer = 0f;
-    private float clickClackAngle = 0f; 
+    private float clickClackTargetAngle = 0f; // UPDATED
+    private float clickClackDelayTimer = 0f; // ADDED: tracks the pause
     
     private bool hasPlayedVictory = false; 
 
@@ -129,15 +133,22 @@ public class LockRakeController : MonoBehaviour
         }
 
 
-        // shaking & click-clack movement
+        // ADDED: the new mechanical pause logic!
         if (shakeTimer > 0f) {
             shakeTimer -= Time.deltaTime;
             float randomJitter = Random.Range(-errorShakeMultiplier * 50f, errorShakeMultiplier * 50f);
             transform.localRotation = Quaternion.Euler(0, 0, randomJitter);
             transform.localPosition = Vector3.Lerp(transform.localPosition, initialLocalPos, Time.deltaTime * 15f);
         } else {
-            clickClackAngle = Mathf.Lerp(clickClackAngle, 0f, Time.deltaTime * 15f);
-            transform.localRotation = Quaternion.Euler(0, 0, clickClackAngle);
+            if (clickClackDelayTimer > 0f) {
+                // freezes the rake in the bumped position
+                clickClackDelayTimer -= Time.deltaTime;
+                transform.localRotation = Quaternion.Euler(0, 0, clickClackTargetAngle);
+            } else {
+                // drops back to normal smoothly once the pause is over
+                clickClackTargetAngle = Mathf.Lerp(clickClackTargetAngle, 0f, Time.deltaTime * 15f);
+                transform.localRotation = Quaternion.Euler(0, 0, clickClackTargetAngle);
+            }
             transform.localPosition = Vector3.Lerp(transform.localPosition, initialLocalPos, Time.deltaTime * 15f);
         }
     }
@@ -150,10 +161,13 @@ public class LockRakeController : MonoBehaviour
 
         // randomly jolts the rake up or down on a good press so it looks chaotic!
         if (Random.value > 0.5f) {
-            clickClackAngle = clickClackBumpAmount; 
+            clickClackTargetAngle = clickClackBumpAmount; 
         } else {
-            clickClackAngle = -clickClackBumpAmount; 
+            clickClackTargetAngle = -clickClackBumpAmount; 
         }
+
+        // ADDED: start the freeze-frame timer
+        clickClackDelayTimer = clickClackHoldTime;
         
         if (AudioManager.Instance != null) {
             AudioManager.Instance.PlayPickMove();
