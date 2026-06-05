@@ -726,6 +726,7 @@ GameObject:
   - component: {fileID: 753956581}
   - component: {fileID: 753956580}
   - component: {fileID: 753956579}
+  - component: {fileID: 753956583}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -823,6 +824,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &753956583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753956578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45582c5850c104e8c9d97c842f1716a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonPromptUI
+  wBright: {fileID: 34950105}
+  wDull: {fileID: 763195378}
+  aBright: {fileID: 0}
+  aDull: {fileID: 0}
+  sBright: {fileID: 0}
+  sDull: {fileID: 0}
+  dBright: {fileID: 0}
+  dDull: {fileID: 0}
 --- !u!1 &763195378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,7 +1644,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LockRakeController
   pickTransform: {fileID: 724908591}
   semiCircleRim: {fileID: 1692932356}
-  buttonUI: {fileID: 0}
+  buttonUI: {fileID: 753956583}
   segmentsToUnlock: 5
   pressesPerSegment: 10
   rakeLeftMaxAngle: -45
