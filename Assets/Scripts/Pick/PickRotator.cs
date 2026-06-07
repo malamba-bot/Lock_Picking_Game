@@ -24,6 +24,7 @@ public class PickRotator : MonoBehaviour {
     }
 
     private void RotatePick(InputAction.CallbackContext value) {
+        Debug.Log("Hello");
         float mouseX = value.ReadValue<float>();
         float offset = (mouseX - _lastFrameMouseX) * sens * -1;
 
@@ -39,7 +40,6 @@ public class PickRotator : MonoBehaviour {
         Vector3 angle = new Vector3(
                 0,0,
                 offset);
-        transform.Rotate(angle);
         transform.Rotate(angle);
         brokenPick.transform.Rotate(angle);
 
