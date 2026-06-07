@@ -8,7 +8,7 @@ public class LockRakeController : MonoBehaviour
     [Header("pick reference")]
     public Transform pickTransform; 
     public PickSemiCircleOutline semiCircleRim; 
-    public GameObject pick;
+    public GameObject pickContainer;
 
     [Header("ui script")]
     public ButtonPromptUI buttonUI; 
@@ -39,13 +39,13 @@ public class LockRakeController : MonoBehaviour
     private float clickClackDelayTimer = 0f; // ADDED: tracks the pause
     
     private bool hasPlayedVictory = false; 
-    private PickRotator _pickRotator;
+    private PickContainer _pickContainer;
 
 
     void Start() {
         initialLocalPos = transform.localPosition;
         PickNextKey(); // picks the very first random starting key
-        _pickRotator = pick.GetComponent<PickRotator>();
+        _pickContainer = pickContainer.GetComponent<PickContainer>();
     }
 
     // randomly selects the next required key (and updates the UI)
@@ -92,7 +92,7 @@ public class LockRakeController : MonoBehaviour
         }
 
         bool insideGreenZone = 
-            _pickRotator.angle <= semiCircleRim.extremeAngles.min + 5f;
+            _pickContainer.GetAngle() <= semiCircleRim.extremeAngles.min + 5f;
 
         // check all 4 keys
         bool hitW = Keyboard.current.wKey.wasPressedThisFrame;
@@ -185,12 +185,10 @@ public class LockRakeController : MonoBehaviour
     private void TriggerError() 
     {
         shakeTimer = 0.3f;
-        _pickRotator.integrity -= 1;
-        Debug.Log($"integrity left: {_pickRotator.integrity}");
+        _pickContainer.Damage();
+        Debug.Log($"integrity left: {_pickContainer.GetIntegrity()}");
         if (AudioManager.Instance != null) {
             AudioManager.Instance.PlayLockError();
-        }
-        if (_pickRotator.integrity == 0) {
         }
     }
 }

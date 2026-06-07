@@ -7,6 +7,7 @@ public class PickRotator : MonoBehaviour {
     [SerializeField] private float maxAngle = 0;
     [SerializeField] private float minAngle = -180;
     [SerializeField] private PickSemiCircleOutline semiCircleRim;
+    [SerializeField] private GameObject brokenPick;
 
     [HideInInspector] public float totalRange;
     [HideInInspector] public float angle;
@@ -39,6 +40,8 @@ public class PickRotator : MonoBehaviour {
                 0,0,
                 offset);
         transform.Rotate(angle);
+        transform.Rotate(angle);
+        brokenPick.transform.Rotate(angle);
 
         _lastFrameMouseX = mouseX;
     }
