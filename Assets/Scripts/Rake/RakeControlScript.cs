@@ -8,6 +8,7 @@ public class LockRakeController : MonoBehaviour
     [Header("pick reference")]
     public Transform pickTransform; 
     public PickSemiCircleOutline semiCircleRim; 
+    public GameObject pickContainer;
 
     [Header("ui script")]
     public ButtonPromptUI buttonUI; 
@@ -38,11 +39,13 @@ public class LockRakeController : MonoBehaviour
     private float clickClackDelayTimer = 0f; // ADDED: tracks the pause
     
     private bool hasPlayedVictory = false; 
+    private PickContainer _pickContainer;
 
 
     void Start() {
         initialLocalPos = transform.localPosition;
         PickNextKey(); // picks the very first random starting key
+        _pickContainer = pickContainer.GetComponent<PickContainer>();
     }
 
     // randomly selects the next required key (and updates the UI)
@@ -88,17 +91,8 @@ public class LockRakeController : MonoBehaviour
             return; 
         }
 
-        // figure out where the "sweet spot" is
-        float processedPickAngle = pickTransform.eulerAngles.z;
-        if (processedPickAngle < 90) processedPickAngle += 360;
-        processedPickAngle -= 270; 
-
-        float degreesPerSegment = 90f / semiCircleRim.numSegments;
-        float zoneMin = semiCircleRim.extremeAngles.min; 
-        float zoneMax = zoneMin + degreesPerSegment; 
-
-        bool insideGreenZone = processedPickAngle >= (zoneMin - 1f) && processedPickAngle <= (zoneMax + 1f);
-
+        bool insideGreenZone = 
+            _pickContainer.GetAngle() <= semiCircleRim.extremeAngles.min + 5f;
 
         // check all 4 keys
         bool hitW = Keyboard.current.wKey.wasPressedThisFrame;
@@ -191,6 +185,8 @@ public class LockRakeController : MonoBehaviour
     private void TriggerError() 
     {
         shakeTimer = 0.3f;
+        _pickContainer.Damage();
+        Debug.Log($"integrity left: {_pickContainer.GetIntegrity()}");
         if (AudioManager.Instance != null) {
             AudioManager.Instance.PlayLockError();
         }
