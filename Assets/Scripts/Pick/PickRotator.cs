@@ -24,7 +24,6 @@ public class PickRotator : MonoBehaviour {
     }
 
     private void RotatePick(InputAction.CallbackContext value) {
-        Debug.Log("Hello");
         float mouseX = value.ReadValue<float>();
         float offset = (mouseX - _lastFrameMouseX) * sens * -1;
 
