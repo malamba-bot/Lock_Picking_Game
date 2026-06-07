@@ -92,15 +92,20 @@ public class LockRakeController : MonoBehaviour
         }
 
         // figure out where the "sweet spot" is
-        float processedPickAngle = pickTransform.eulerAngles.z;
+        /*
+           float processedPickAngle = pickTransform.eulerAngles.z;
         if (processedPickAngle < 90) processedPickAngle += 360;
         processedPickAngle -= 270; 
 
         float degreesPerSegment = 90f / semiCircleRim.numSegments;
         float zoneMin = semiCircleRim.extremeAngles.min; 
         float zoneMax = zoneMin + degreesPerSegment; 
+        */
 
-        bool insideGreenZone = processedPickAngle >= (zoneMin - 1f) && processedPickAngle <= (zoneMax + 1f);
+        bool insideGreenZone = 
+            _pickRotator.angle <= semiCircleRim.extremeAngles.min + 5f;
+
+            //processedPickAngle >= (zoneMin - 1f) && processedPickAngle <= (zoneMax + 1f);
 
 
         // check all 4 keys

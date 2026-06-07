@@ -9,6 +9,7 @@ public class PickRotator : MonoBehaviour {
     [SerializeField] private PickSemiCircleOutline semiCircleRim;
 
     [HideInInspector] public float totalRange;
+    [HideInInspector] public float angle;
     [HideInInspector] public float integrity = 5;
 
     private float _lastFrameMouseX;
@@ -31,6 +32,7 @@ public class PickRotator : MonoBehaviour {
         //Debug.Log(currentAngle);
         var extremes = semiCircleRim.extremeAngles;
         float clampedAngle = Mathf.Clamp(currentAngle + offset, extremes.min, extremes.max);
+        this.angle = clampedAngle;
         offset = clampedAngle - currentAngle;
 
         Vector3 angle = new Vector3(
