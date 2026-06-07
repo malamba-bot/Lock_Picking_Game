@@ -9,6 +9,7 @@ public class PickRotator : MonoBehaviour {
     [SerializeField] private PickSemiCircleOutline semiCircleRim;
 
     [HideInInspector] public float totalRange;
+    [HideInInspector] public float integrity = 5;
 
     private float _lastFrameMouseX;
     private float _currentSegment;

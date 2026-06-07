@@ -722,6 +722,7 @@ MonoBehaviour:
   minAngle: -90
   semiCircleRim: {fileID: 1692932356}
   totalRange: 0
+  integrity: 5
 --- !u!4 &724908591 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3910990755373119420, guid: 65fb448b5d6b74cfd9c8dec00a844b5f, type: 3}
@@ -1860,6 +1861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LockRakeController
   pickTransform: {fileID: 724908591}
   semiCircleRim: {fileID: 1692932356}
+  pick: {fileID: 724908589}
   buttonUI: {fileID: 753956583}
   segmentsToUnlock: 5
   pressesPerSegment: 10

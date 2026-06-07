@@ -8,6 +8,7 @@ public class LockRakeController : MonoBehaviour
     [Header("pick reference")]
     public Transform pickTransform; 
     public PickSemiCircleOutline semiCircleRim; 
+    public GameObject pick;
 
     [Header("ui script")]
     public ButtonPromptUI buttonUI; 
@@ -38,11 +39,13 @@ public class LockRakeController : MonoBehaviour
     private float clickClackDelayTimer = 0f; // ADDED: tracks the pause
     
     private bool hasPlayedVictory = false; 
+    private PickRotator _pickRotator;
 
 
     void Start() {
         initialLocalPos = transform.localPosition;
         PickNextKey(); // picks the very first random starting key
+        _pickRotator = pick.GetComponent<PickRotator>();
     }
 
     // randomly selects the next required key (and updates the UI)
@@ -191,6 +194,8 @@ public class LockRakeController : MonoBehaviour
     private void TriggerError() 
     {
         shakeTimer = 0.3f;
+        _pickRotator.integrity -= 1;
+        Debug.Log($"integrity left: {_pickRotator.integrity}");
         if (AudioManager.Instance != null) {
             AudioManager.Instance.PlayLockError();
         }
