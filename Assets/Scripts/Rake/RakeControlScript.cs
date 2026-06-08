@@ -21,7 +21,7 @@ public class LockRakeController : MonoBehaviour
     public float smoothSpeed = 6f;
 
     private int currentPresses = 0;
-    private int currentSegmentsUnlocked = 0;
+    private int currentSegmentsUnlocked = 1;
     private float currentVisualAngle = 0f;
 
     // tracks which WASD key is currently required
