@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PickContainer : MonoBehaviour {
 
@@ -23,13 +24,15 @@ public class PickContainer : MonoBehaviour {
     public void Damage() {
         _pickRotator.integrity -= 1;
         if (_pickRotator.integrity == 0) {
-            BreakPick();
+            StartCoroutine(BreakPick());
         }
     }
 
-    public void BreakPick() {
+    public IEnumerator BreakPick() {
         pick.SetActive(false);
         brokenPick.SetActive(true);
+
+        yield return new WaitForSeconds(1);
         
         // triger game over
         if (GameMenuManager.Instance != null) GameMenuManager.Instance.ShowGameOver();
