@@ -450,9 +450,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: you need to hold the pick and move it donwards toward the limit of the 
-    green area and then press teh correct buttons that are higlighted you cna only
-    miss 5 button presses
+  m_text: To successfully pick the lock, hold down the pressure tool as far right
+    as you can with your mouse. While applying pressure, press the highlighted keys
+    to move the rake and unlock more range.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
