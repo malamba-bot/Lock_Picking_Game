@@ -50,4 +50,11 @@ public class PickRotator : MonoBehaviour {
         InputAction rotatePick = actionMap.FindAction("Rotate");
         rotatePick.performed += RotatePick; 
     }
+
+    private void OnDisable() {
+        InputActionAsset actionMap = InputSystem.actions;
+        InputAction rotatePick = actionMap.FindAction("Rotate");
+        rotatePick.performed -= RotatePick; 
+    }
+
 }
