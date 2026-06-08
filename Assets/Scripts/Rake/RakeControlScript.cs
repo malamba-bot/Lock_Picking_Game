@@ -69,7 +69,11 @@ public class LockRakeController : MonoBehaviour
     {
         if (pickTransform == null || semiCircleRim == null) return;
 
-        bool isWinState = currentSegmentsUnlocked >= segmentsToUnlock;
+        bool insideGreenZone = 
+            _pickContainer.GetAngle() <= semiCircleRim.extremeAngles.min + 5f;
+
+
+        bool isWinState = (currentSegmentsUnlocked >= segmentsToUnlock && insideGreenZone);
 
         if (isWinState) 
         {
@@ -96,9 +100,6 @@ public class LockRakeController : MonoBehaviour
             }
             return; 
         }
-
-        bool insideGreenZone = 
-            _pickContainer.GetAngle() <= semiCircleRim.extremeAngles.min + 5f;
 
         // check all 4 keys
         bool hitW = Keyboard.current.wKey.wasPressedThisFrame;
