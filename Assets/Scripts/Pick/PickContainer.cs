@@ -30,5 +30,9 @@ public class PickContainer : MonoBehaviour {
     public void BreakPick() {
         pick.SetActive(false);
         brokenPick.SetActive(true);
+        
+        // triger game over
+        if (GameMenuManager.Instance != null) GameMenuManager.Instance.ShowGameOver();
+
     }
 }

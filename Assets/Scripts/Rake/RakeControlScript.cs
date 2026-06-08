@@ -86,6 +86,12 @@ public class LockRakeController : MonoBehaviour
 
             if (Mathf.Abs(currentVisualAngle - rakeLeftMaxAngle) < 1f) {
                 Debug.Log("lock picked! victory!");
+
+                if (GameMenuManager.Instance != null) GameMenuManager.Instance.ShowVictory();
+            
+                // hides  WASD buttons so the screen looks clean
+                if (buttonUI != null) buttonUI.gameObject.SetActive(false);
+                
                 enabled = false; 
             }
             return; 
